@@ -1,10 +1,10 @@
-@model IEnumerable<SchoolManagementApp.MVC.Data.Lecturer>
+@model IEnumerable<SchoolManagementApp.MVC.Data.Lesson>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Lecturers</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -12,11 +12,14 @@
 <table class="table">
     <thead>
         <tr>
-            <th> 
-                @Html.DisplayNameFor(model => model.FirstName)
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lecturer)
             </th>
             <th></th>
         </tr>
@@ -25,30 +28,34 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.Time)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @item.Course.Code - @item.Course.Name
+            </td>
+            <td>
+                @item.Lecturer.FirstName @item.Lecturer.LastName
             </td>
             <td>
                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
                 <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> 
                 <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Delete</button>
+                <a asp-action="ManageEnrollments" class="btn btn-success" asp-route-lessonId="@item.Id">Manage Enrollments</a> 
             </td>
         </tr>
 }
     </tbody>
 </table>
 
-<form asp-action="Delete" id="lecturerDeleteForm">
-    <input type="hidden" id="lecturerid" name="Id"/>
+<form asp-action="Delete" id="classDeleteForm">
+    <input type="hidden" id="classid" name="Id"/>
 </form>
 
 @section Scripts{
     <script>
         $(function(){
             $('.table').DataTable();
-
+            
             $('.deleteBtn').click(function(e){
                 Swal.fire({
                     title: 'Are you sure?',
@@ -67,8 +74,8 @@
                             );
                             var btn = $(this);
                             var id = btn.data("id");
-                            $('#lecturerid').val(id);
-                            $('#lecturerDeleteForm').submit();
+                            $('#courseid').val(id);
+                            $('#courseDeleteForm').submit();
                         }
                     })
             })
